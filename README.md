@@ -16,8 +16,8 @@ From imitation learning to a vision-language-action (VLA) model, on one simulate
 
 | Step | What | Status |
 |---|---|---|
-| 0 | Setup: WSL2, conda env, LeRobot, run the PushT simulation | in progress |
-| 1 | Look at the data: what is an observation, what is an action | |
+| 0 | Setup: WSL2, conda env, LeRobot, run the PushT simulation | done |
+| 1 | Look at the data: what is an observation, what is an action | in progress |
 | 2 | Train and evaluate a classic policy (Diffusion Policy or ACT) | |
 | 3 | Fine-tune SmolVLA on the same task | |
 | 4 | Benchmark: success rate, data efficiency, latency; ONNX export | |
