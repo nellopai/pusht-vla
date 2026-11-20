@@ -1,0 +1,22 @@
+# training runs, checkpoints, exported models
+outputs/
+*.onnx
+*.safetensors
+*.pt
+
+# experiment trackers
+wandb/
+.trackio/
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# editors / OS
+.vscode/
+.DS_Store
+
+# Claude context (kept local)
+CLAUDE.md
+CLAUDE.local.md
