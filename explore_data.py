@@ -67,12 +67,13 @@ plt.savefig(OUT / "step1_trajectory.png", dpi=120)
 #   ds[i]["observation.image"] is a float tensor (3, 96, 96) in [0, 1];
 #   PIL wants uint8 (96, 96, 3). Think: permute, scale, cast.
 def save_image(tensor, path):
-    ...
-
+    image_to_be_saved = ((tensor.permute(1,2,0)).numpy()*255).astype(np.uint8)
+    Image.fromarray(image_to_be_saved).save(path)
 
 save_image(ds[0]["observation.image"], OUT / "step1_first.png")
 save_image(ds[len(ds) - 1]["observation.image"], OUT / "step1_last.png")
 
 # TODO 5: print the reward at the first and last frame, and whether the episode
 #   is marked as a success ("next.reward", "next.success").
-...
+print(f"first={ds[0]["next.reward"].item():.3f}, last ={ds[-1]["next.reward"].item():.3f}")
+print(f"first={ds[0]["next.success"].item()}, last={ds[-1]["next.success"].item()}")

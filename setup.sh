@@ -25,6 +25,7 @@ conda install -y -c conda-forge --override-channels ffmpeg
 #    diffusion -> Diffusion Policy
 #    smolvla   -> SmolVLA (step 3)
 pip install 'lerobot[training,pusht,diffusion,smolvla]'
+pip install matplotlib   # plots in explore_data.py
 
 # 4. Check that everything works.
 python check_env.py
