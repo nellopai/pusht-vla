@@ -32,7 +32,7 @@ setting where a small specialised policy should be strongest. So the questions a
 | 0 | Setup: WSL2, conda env, LeRobot, run the PushT simulation | done |
 | 1 | Look at the data: what is an observation, what is an action | done |
 | 2 | Evaluation pipeline, checked with the pretrained Diffusion Policy (`lerobot/diffusion_pusht`) | done |
-| 3 | SmolVLA: test run (memory, speed), then fine-tune on all demonstrations | |
+| 3 | SmolVLA: test run (memory, speed), then fine-tune on all demonstrations | trained; evaluation in progress ([notes](notes/03-smolvla.md)) |
 | 4 | Low-data regime: Diffusion Policy and SmolVLA on ~10% of the demonstrations | |
 | 5 | Benchmark: success rate and coverage on 100 episodes, robustness to visual perturbations, latency on GPU and CPU | |
 | 6 | Write-up: results table, trade-off plot, failure analysis, GIFs, limitations | |
@@ -91,6 +91,8 @@ setup.sh                environment setup
 requirements-lock.txt   exact package versions
 check_env.py            sanity check: GPU, LeRobot, PushT simulation
 explore_data.py         step 1: look at one demonstration
+train_smolvla.sh        step 3: fine-tune SmolVLA on PushT
+eval_smolvla.py         step 3: evaluate SmolVLA with the training instruction
 notes/                  my own notes per step
 outputs/                plots, training runs and checkpoints (not committed)
 ```
