@@ -16,9 +16,14 @@ cost to run?
 
 ## Questions
 
-1. How well does a classic imitation-learning policy (ACT or Diffusion Policy) solve PushT?
-2. Does fine-tuning a small pretrained VLA (SmolVLA, 450M) beat it, and with how much data?
-3. What does each cost at inference time on edge-class hardware (laptop CPU and GPU, ONNX)?
+**When does a VLA pay off?** PushT is a narrow, single-task problem with one fixed instruction, the
+setting where a small specialised policy should be strongest. So the questions are:
+
+1. How well does a specialised imitation-learning policy (Diffusion Policy) solve PushT?
+2. Does VLA pretraining (SmolVLA, 450M) still pay off on such a task: in success rate, and especially
+   when demonstrations are scarce?
+3. How robust is each policy to visual perturbations it never saw in training?
+4. What does each cost to run on edge-class hardware (laptop GPU vs. CPU)?
 
 ## Plan
 
@@ -26,10 +31,11 @@ cost to run?
 |---|---|---|
 | 0 | Setup: WSL2, conda env, LeRobot, run the PushT simulation | done |
 | 1 | Look at the data: what is an observation, what is an action | done |
-| 2 | Train and evaluate a classic policy (Diffusion Policy or ACT) | |
-| 3 | Fine-tune SmolVLA on the same task | |
-| 4 | Benchmark: success rate, data efficiency, latency; ONNX export | |
-| 5 | Write-up: results table, GIFs, what I learned | |
+| 2 | Evaluation pipeline, checked with the pretrained Diffusion Policy (`lerobot/diffusion_pusht`) | done |
+| 3 | SmolVLA: test run (memory, speed), then fine-tune on all demonstrations | |
+| 4 | Low-data regime: Diffusion Policy and SmolVLA on ~10% of the demonstrations | |
+| 5 | Benchmark: success rate and coverage on 100 episodes, robustness to visual perturbations, latency on GPU and CPU | |
+| 6 | Write-up: results table, trade-off plot, failure analysis, GIFs, limitations | |
 
 ## Setup
 
@@ -91,4 +97,6 @@ outputs/                plots, training runs and checkpoints (not committed)
 
 ## Limitations
 
-_To be filled in. Known so far: one simulated 2D task, one small dataset, a single laptop GPU._
+_To be filled in. Known so far: one simulated 2D task, one small dataset, a single laptop GPU.
+PushT has a single fixed instruction and 96×96 synthetic images, so it does not test what VLAs are built
+for (language-conditioned, multi-task generalisation); the comparison is about pretraining on a narrow task._
