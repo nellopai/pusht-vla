@@ -69,6 +69,7 @@ Fixed before training, so the comparison is fair:
 ## Results
 
 _In progress._ 100 episodes, same seeds for every policy; 95% confidence interval in brackets.
+All runs: [results/summary.csv](results/summary.csv).
 
 | Policy | Demos | Success rate | Avg. max coverage | Latency GPU | Latency CPU |
 |---|---|---|---|---|---|
@@ -87,6 +88,19 @@ an empty or meaningless one ~0%.
 bash setup.sh                 # conda env "lerobot"; run the commands one by one the first time
 python check_env.py           # GPU, LeRobot, PushT simulation
 python explore_data.py        # step 1: plots and images in outputs/
+
+# step 2: pretrained Diffusion Policy, converted to LeRobot 0.7's format
+python migrate_dp.py --pretrained-path lerobot/diffusion_pusht --output-dir outputs/models/diffusion_pusht_migrated
+
+# step 3: fine-tune SmolVLA on all demos (~5 h on an RTX 4060 Laptop)
+bash train_smolvla.sh smolvla_full_s1000 --seed=1000
+
+# step 4: both policies on the same 10% subset (subsets.json from make_subsets.py)
+bash run_lowdata.sh A
+
+# step 5: all 100-episode evaluations (skips finished runs), then the summary table
+bash run_evals.sh
+python collect_results.py     # results/summary.csv
 ```
 
 Exact package versions are in [requirements-lock.txt](requirements-lock.txt)
@@ -100,15 +114,23 @@ setup.sh                environment setup
 requirements-lock.txt   exact package versions
 check_env.py            sanity check: GPU, LeRobot, PushT simulation
 explore_data.py         step 1: look at one demonstration
+migrate_dp.py           step 2: convert the pretrained Diffusion Policy to LeRobot 0.7's format
 train_smolvla.sh        step 3: fine-tune SmolVLA on PushT
 eval_smolvla.py         step 3: evaluate SmolVLA with the training instruction
 make_subsets.py         step 4: draw the 10% subsets (subsets.json)
 train_diffusion.sh      step 4: train Diffusion Policy from scratch
 run_lowdata.sh          step 4: train both policies on one subset
 run_evals.sh            step 5: all 100-episode evaluations
+collect_results.py      step 5: gather evaluations into results/
+results/                summary.csv and per-run metrics behind every number in this README
 notes/                  my own notes per step
-outputs/                plots, training runs and checkpoints (not committed)
+outputs/                plots, training runs, checkpoints and raw eval output (not committed)
 ```
+
+## License
+
+Code and notes in this repository: [MIT](LICENSE). LeRobot, the `lerobot/pusht` dataset and the
+pretrained models keep their own licenses.
 
 ## Limitations
 

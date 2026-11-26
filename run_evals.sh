@@ -42,4 +42,31 @@ for key in envid empty paraphrase; do
   run smolvla_full_s1000_020000_a8_task-${key}_n$N python eval_smolvla.py --task "${TASKS[$key]}" \
     --policy.path=$SMOLVLA/020000/pretrained_model --policy.n_action_steps=8 "${SMOLVLA_ARGS[@]}" "${COMMON[@]}"
 done
+# Step 4: low-data runs (10% subsets), checkpoints along the training curve.
+# 2k steps ~ same epochs as the 100% runs, 20k ~ same compute. Only checkpoints that exist are evaluated.
+strip_unused_cameras() {  # smolvla_base lists cameras 2/3; never in the batch, but lerobot-eval asks for them
+  python - "$1" <<'EOF'
+import json, os, shutil, sys
+p = sys.argv[1]
+if not os.path.exists(p + ".orig"):
+    shutil.copy(p, p + ".orig")
+c = json.load(open(p))
+for k in ("observation.images.camera2", "observation.images.camera3"):
+    c["input_features"].pop(k, None)
+json.dump(c, open(p, "w"), indent=4)
+EOF
+}
+for subset in A B; do
+  for step in 002000 005000 010000 020000; do
+    ck=outputs/train/dp_subset${subset}_s1000/checkpoints/$step/pretrained_model
+    [[ -d $ck ]] && run dp_subset${subset}_s1000_${step}_n$N lerobot-eval --policy.path=$ck \
+      --policy.use_amp=false "${COMMON[@]}"
+    ck=outputs/train/smolvla_subset${subset}_s1000/checkpoints/$step/pretrained_model
+    if [[ -d $ck ]]; then
+      strip_unused_cameras $ck/config.json
+      run smolvla_subset${subset}_s1000_${step}_a8_n$N python eval_smolvla.py \
+        --policy.path=$ck --policy.n_action_steps=8 "${SMOLVLA_ARGS[@]}" "${COMMON[@]}"
+    fi
+  done
+done
 echo "$(date +%H:%M) all done"
