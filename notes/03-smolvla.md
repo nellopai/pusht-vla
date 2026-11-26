@@ -33,26 +33,59 @@ Scripts: `train_smolvla.sh` (training), `eval_smolvla.py` (evaluation with the r
 | LeRobot env wrapper vs. raw `gym.make`, same seed and actions | identical images and dynamics | simulator OK |
 | Own closed-loop rollout, seeds 0–2 | 3/3 success with the instruction; with an empty one: 0.97, **0.00**, 0.96 | it's the language input |
 
-## First result (10 episodes, default eval seeds, `n_action_steps=8`)
+A second eval bug (2026-11-26): the `--task` override first reached only the main process. The simulator
+workers re-import `eval_smolvla.py` without the command-line arguments and fell back to the default
+instruction; now it is passed through the environment variable `PUSHT_EVAL_TASK`. Again visible in
+`task_descriptions.json`.
+
+## Results: 100 episodes, environment seeds 1000–1099, the same for every policy (`run_evals.sh`)
+
+All demos (206). SmolVLA executes 8 actions per predicted chunk unless stated otherwise.
 
 | Policy | Success | 95% CI | Avg. max coverage |
 |---|---|---|---|
-| Diffusion Policy (pretrained `lerobot/diffusion_pusht`) | 5/10 = 50% | 24–76% | 0.95 |
-| SmolVLA, 20k steps | 3/10 = 30% | 11–60% | 0.86 |
+| Diffusion Policy, pretrained `lerobot/diffusion_pusht` (200k steps × batch 64) | **63%** | 53–72 | 0.93 |
+| SmolVLA, 5k steps | 5% | 2–11 | 0.59 |
+| SmolVLA, 10k steps | 29% | 21–39 | 0.75 |
+| SmolVLA, 15k steps | **47%** | 38–57 | 0.88 |
+| SmolVLA, 20k steps (batch 32) | 43% | 34–53 | 0.90 |
+| SmolVLA, 20k steps, executes all 50 actions | 10% | 6–17 | 0.63 |
 
-Too few episodes to rank the policies. Eval speed: ~3.3 s/episode with 10 parallel envs (100 episodes ≈ 6 min).
+(10-episode pilot: Diffusion Policy 50% [24–76], SmolVLA 30% [11–60]; far too few episodes to rank.)
 
-## Finding for the write-up
+- **Specialist wins on all data:** 63% vs. 43% (two-proportion test p ≈ 0.005). Caveat: not compute-matched,
+  the pretrained Diffusion Policy saw 12.8M samples, our SmolVLA 640k (20× fewer).
+- **SmolVLA saturates around 15k steps** (15k vs. 20k is noise), so more steps would not close the gap.
+- **Replanning matters:** executing the whole 50-action chunk (5 s blind) drops success from 43% to 10%.
+  With 8 actions the policy corrects its errors from fresh observations (closed loop beats open loop,
+  the same argument as distribution shift in step 1).
 
-A VLA fine-tuned on one fixed instruction depends heavily on the exact wording at test time: training
-instruction 30% (10 ep), env id "PushT-v0" ~0%. Silent failure: nothing errors, the policy just acts wrongly.
-Fits the robustness question (Q3); measure properly with 100 episodes (training instruction, "PushT-v0",
-empty string, a paraphrase).
+Eval speed: ~3.3 s/episode with 10 parallel envs (100 episodes ≈ 6 min for SmolVLA, ~13 min for DP).
 
-## Next (planned for 2026-11-26)
+## Instruction sensitivity (SmolVLA 20k, 8 actions, same 100 seeds)
 
-- 100-episode evals: SmolVLA checkpoints 5k/10k/15k/20k, Diffusion Policy, same seeds.
-- Decide `n_action_steps`: 8 (like Diffusion Policy) vs. the checkpoint default 50 (5 s open loop);
-  possibly both as a small ablation.
-- Instruction-sensitivity eval (see above).
-- Then step 4: low-data runs (~10% of demos).
+| Instruction at test time | Success | 95% CI | Avg. max coverage |
+|---|---|---|---|
+| "Push the T-shaped block onto the T-shaped target." (training) | **43%** | 34–53 | 0.90 |
+| "Move the T block so that it covers the green T." (paraphrase) | 36% | 27–46 | 0.81 |
+| "PushT-v0" (LeRobot's fallback) | 1% | 0–5 | 0.40 |
+| "" (empty) | 0% | 0–4 | 0.44 |
+
+- A paraphrase almost works (36 vs. 43 is within noise): the frozen VLM maps the same meaning to similar
+  features, so the action expert's input stays close to training.
+- Meaningless or missing text collapses the policy, with identical image and state. On PushT the
+  instruction carries no information (always the same), yet the policy can't work without it: fine-tuning
+  on one instruction ties the action expert to the VLM's features for that kind of sentence.
+- Why: the action expert only cross-attends to VLM features of [image, text, state]; inside the VLM the
+  image tokens attend to the text, so the text changes the image features too.
+- Deployment lesson: a silent failure mode a single-task specialist doesn't have.
+
+## Cost observed so far
+
+- Training speed at batch 32: Diffusion Policy 0.20 s/step (5.0 GB), SmolVLA ~1.0 s/step (5.4 GB): 5×.
+- Parameters: Diffusion Policy 263M (all trained), SmolVLA 450M (100M trained, VLM frozen).
+- Inference: SmolVLA runs the VLM once per chunk and caches its keys/values (`use_cache`), then 10
+  flow-matching steps of the action expert; Diffusion Policy runs 100 denoising steps of its U-Net.
+  To be measured (Q4).
+
+Next: step 4, see [04-low-data.md](04-low-data.md).

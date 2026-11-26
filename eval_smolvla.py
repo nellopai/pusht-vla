@@ -9,17 +9,20 @@ Diffusion Policy ignores language, so it is unaffected.
 `--task` overrides the instruction (e.g. --task "PushT-v0" reproduces the default behaviour).
 """
 
+import os
 import sys
 
 import gymnasium as gym
 
 TRAIN_TASK = "Push the T-shaped block onto the T-shaped target."  # lerobot/pusht, all episodes
 
-task = TRAIN_TASK
-if "--task" in sys.argv:
+# The simulator worker processes re-import this file without our command-line arguments, so the
+# instruction is passed to them through an environment variable (inherited by child processes).
+if __name__ == "__main__" and "--task" in sys.argv:
     i = sys.argv.index("--task")
-    task = sys.argv[i + 1]
+    os.environ["PUSHT_EVAL_TASK"] = sys.argv[i + 1]
     del sys.argv[i : i + 2]
+task = os.environ.get("PUSHT_EVAL_TASK", TRAIN_TASK)
 
 # LeRobot reads getattr(env, "task_description") on the env returned by gym.make, i.e. on the outermost
 # Gymnasium wrapper. Gymnasium 1.x wrappers don't forward attributes to the inner env, so the

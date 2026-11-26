@@ -32,8 +32,8 @@ setting where a small specialised policy should be strongest. So the questions a
 | 0 | Setup: WSL2, conda env, LeRobot, run the PushT simulation | done |
 | 1 | Look at the data: what is an observation, what is an action | done |
 | 2 | Evaluation pipeline, checked with the pretrained Diffusion Policy (`lerobot/diffusion_pusht`) | done |
-| 3 | SmolVLA: test run (memory, speed), then fine-tune on all demonstrations | trained; evaluation in progress ([notes](notes/03-smolvla.md)) |
-| 4 | Low-data regime: Diffusion Policy and SmolVLA on ~10% of the demonstrations | |
+| 3 | SmolVLA: test run (memory, speed), then fine-tune on all demonstrations | done ([notes](notes/03-smolvla.md)) |
+| 4 | Low-data regime: Diffusion Policy and SmolVLA on ~10% of the demonstrations | running ([notes](notes/04-low-data.md)) |
 | 5 | Benchmark: success rate and coverage on 100 episodes, robustness to visual perturbations, latency on GPU and CPU | |
 | 6 | Write-up: results table, trade-off plot, failure analysis, GIFs, limitations | |
 
@@ -59,18 +59,27 @@ Fixed before training, so the comparison is fair:
 - **Success rate:** fraction of episodes where the block covers > 95% of the target at any point.
 - **Average maximum coverage:** how close the policy gets, also when it fails. The stored rewards in the
   dataset are not used: no demonstration there reaches the success threshold (see notes/01-data.md).
-- **Episodes and seeds:** _N_ evaluation episodes with fixed environment seeds, the same for every
-  policy; report the spread over _k_ training seeds where compute allows.
-- **Data efficiency:** the same metrics after training on subsets of the demonstrations (e.g. 25%, 50%, 100%).
+- **Episodes and seeds:** 100 evaluation episodes with fixed environment seeds (1000–1099), the same
+  for every policy, with 95% Wilson confidence intervals.
+- **Data efficiency:** the same metrics after training both policies on the same random 10% of the
+  demonstrations (21 episodes), with the same training budget; a second, disjoint subset checks that the
+  result doesn't depend on which episodes were drawn.
 - **Latency:** time per action chunk and per action, batch size 1, on laptop GPU and CPU, PyTorch and ONNX.
 
 ## Results
 
-_To be filled in._
+_In progress._ 100 episodes, same seeds for every policy; 95% confidence interval in brackets.
 
 | Policy | Demos | Success rate | Avg. max coverage | Latency GPU | Latency CPU |
 |---|---|---|---|---|---|
-| | | | | | |
+| Diffusion Policy (pretrained `lerobot/diffusion_pusht`) | 206 | 63% [53–72] | 0.93 | | |
+| SmolVLA, fine-tuned 20k steps | 206 | 43% [34–53] | 0.90 | | |
+| Diffusion Policy, from scratch | 21 | | | | |
+| SmolVLA, fine-tuned | 21 | | | | |
+
+Side results on SmolVLA (details in [notes/03-smolvla.md](notes/03-smolvla.md)): executing the whole
+50-action chunk instead of 8 actions drops success from 43% to 10%; a paraphrased instruction gives 36%,
+an empty or meaningless one ~0%.
 
 ## Reproduce
 
@@ -93,6 +102,10 @@ check_env.py            sanity check: GPU, LeRobot, PushT simulation
 explore_data.py         step 1: look at one demonstration
 train_smolvla.sh        step 3: fine-tune SmolVLA on PushT
 eval_smolvla.py         step 3: evaluate SmolVLA with the training instruction
+make_subsets.py         step 4: draw the 10% subsets (subsets.json)
+train_diffusion.sh      step 4: train Diffusion Policy from scratch
+run_lowdata.sh          step 4: train both policies on one subset
+run_evals.sh            step 5: all 100-episode evaluations
 notes/                  my own notes per step
 outputs/                plots, training runs and checkpoints (not committed)
 ```
