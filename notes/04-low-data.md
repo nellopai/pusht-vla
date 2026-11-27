@@ -29,7 +29,8 @@ demos the specialist wins (Diffusion Policy 63% vs. SmolVLA 43%, see [03-smolvla
 | Run | Status |
 |---|---|
 | Both policies, subset A (10%) | done 2026-11-26 (DP 68 min, SmolVLA 4.5 h) |
-| Both policies, subset H (50%) | DP done 2026-11-26; SmolVLA interrupted overnight by Windows sleep, resumed 2026-11-27 |
+| Both policies, subset H (50%) | done 2026-11-27 (SmolVLA interrupted overnight by Windows sleep, resumed) |
+| Diffusion Policy from scratch, all 206 demos, same budget | queued 2026-11-27 (control, see below) |
 | Both policies, subset B (10%) | dropped for now (see below) |
 
 ## Results: subset A (21 demos)
@@ -64,7 +65,31 @@ place where a pretraining advantage would show if there is one. B stays availabl
 
 ## Results: subset H (103 demos)
 
-_Running._
+| Checkpoint | Diffusion Policy | SmolVLA | SmolVLA, all 206 demos (step 3) |
+|---|---|---|---|
+| 2k | 0% [0–4] (0.21) | 0% [0–4] (0.25) | – |
+| 5k | 0% [0–4] (0.29) | **10%** [6–17] (0.54) | 5% (0.59) |
+| 10k | 0% [0–4] (0.52) | **29%** [21–39] (0.67) | 29% (0.75) |
+| 20k | 14% [9–22] (0.75) | 22% [15–31] (0.69) | 43% (0.90) |
+
+Success at 20k steps vs. number of demos: 21 → DP 4%, SmolVLA 2%; 103 → DP 14%, SmolVLA 22%;
+206 → SmolVLA 43% (DP pretrained 63%, but with 10× the budget, see the control below).
+
+- **With 103 demos, pretraining pays off in speed.** At 5k and 10k steps SmolVLA is clearly ahead (29% vs.
+  0% at 10k is far outside chance) and learns about as fast as with all 206 demos.
+- **Why DP is slow at first:** its ResNet-18 starts from random weights, so it first has to learn to *see*
+  the T and its pose, then how to push. SmolVLA's frozen, pretrained VLM gives useful image features from
+  step 0; only the action expert learns. DP's coverage rises steadily (0.21 → 0.75) while success stays
+  0% until 10k: success is all-or-nothing at 95% coverage and lags behind.
+- **At 20k DP is catching up:** 22% vs. 14% is not significant, and DP's coverage is still climbing
+  steeply, so DP is not done learning at 20k. SmolVLA peaks at 10k (29%) and drops slightly (22%):
+  within noise, possibly the start of overfitting.
+- **The advantage appears between 21 and 103 demos;** at 21 neither policy works.
+
+**Missing control (queued):** the 206-demo DP number is the pretrained model (200k steps × batch 64, 10×
+our budget). Diffusion Policy from scratch on all 206 demos with the same 20k steps fills the curve and
+shows whether DP beats SmolVLA on all data at equal compute. Prediction from the "learn to see" argument:
+near 0% at 5k as well, but a faster climb than on 103 demos.
 
 ## Lessons
 

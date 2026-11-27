@@ -82,4 +82,9 @@ for subset in A B H; do
     fi
   done
 done
+# Diffusion Policy from scratch on all demos, same budget as the subsets (control for the data-scaling curve)
+for step in 002000 005000 010000 020000; do
+  ck=outputs/train/dp_full_s1000/checkpoints/$step/pretrained_model
+  [[ -d $ck ]] && run dp_full_s1000_${step}_n$N lerobot-eval --policy.path=$ck --policy.use_amp=false "${COMMON[@]}"
+done
 echo "$(date +%H:%M) all done"

@@ -67,12 +67,18 @@ Eval speed: ~3.3 s/episode with 10 parallel envs (100 episodes ≈ 6 min for Smo
 | Instruction at test time | Success | 95% CI | Avg. max coverage |
 |---|---|---|---|
 | "Push the T-shaped block onto the T-shaped target." (training) | **43%** | 34–53 | 0.90 |
-| "Move the T block so that it covers the green T." (paraphrase) | 36% | 27–46 | 0.81 |
+| "Move the T block so that it covers the green T." (held-out paraphrase 1) | 36% | 27–46 | 0.81 |
+| "Position the T-shaped block over the goal." (held-out 2) | 24% | 17–33 | 0.74 |
+| "Drive the T into the outlined target region." (held-out 3) | 31% | 23–41 | 0.67 |
+| "Bring the block onto the T-shaped mark." (held-out 4) | 40% | 31–50 | 0.77 |
+| *mean of the 4 held-out paraphrases* | *33%* | | *0.75* |
 | "PushT-v0" (LeRobot's fallback) | 1% | 0–5 | 0.40 |
 | "" (empty) | 0% | 0–4 | 0.44 |
 
-- A paraphrase almost works (36 vs. 43 is within noise): the frozen VLM maps the same meaning to similar
-  features, so the action expert's input stays close to training.
+- Paraphrases mostly work, but cost ~10 points: 24–40%, mean 33% (131/400) vs. 43% (borderline, two-
+  proportion test p ≈ 0.06). The frozen VLM maps the same meaning to similar features, so the action
+  expert's input stays close to training, but not identical. The 4 sentences are the held-out set of
+  `configs/prompts.json`, reused as the test set for prompt augmentation (step 4b).
 - Meaningless or missing text collapses the policy, with identical image and state. On PushT the
   instruction carries no information (always the same), yet the policy can't work without it: fine-tuning
   on one instruction ties the action expert to the VLM's features for that kind of sentence.

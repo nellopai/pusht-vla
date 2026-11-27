@@ -79,14 +79,16 @@ All runs: [results/summary.csv](results/summary.csv).
 |---|---|---|---|---|---|
 | Diffusion Policy (pretrained `lerobot/diffusion_pusht`) | 206 | 63% [53–72] | 0.93 | | |
 | SmolVLA, fine-tuned 20k steps | 206 | 43% [34–53] | 0.90 | | |
-| Diffusion Policy, from scratch, 20k steps | 103 | | | | |
-| SmolVLA, fine-tuned 20k steps | 103 | | | | |
+| Diffusion Policy, from scratch, 20k steps | 206 | _running_ | | | |
+| Diffusion Policy, from scratch, 20k steps | 103 | 14% [9–22] | 0.75 | | |
+| SmolVLA, fine-tuned 20k steps | 103 | 22% [15–31] | 0.69 | | |
 | Diffusion Policy, from scratch, 20k steps | 21 | 4% [2–10] | 0.38 | | |
 | SmolVLA, fine-tuned 20k steps | 21 | 2% [1–7] | 0.26 | | |
 
 Side results on SmolVLA (details in [notes/03-smolvla.md](notes/03-smolvla.md)): executing the whole
-50-action chunk instead of 8 actions drops success from 43% to 10%; a paraphrased instruction gives 36%,
-an empty or meaningless one ~0%.
+50-action chunk instead of 8 actions drops success from 43% to 10%; four held-out paraphrases of the instruction give
+24–40% (mean 33%), an empty or meaningless one ~0%. With 103 demos SmolVLA learns much faster than
+Diffusion Policy (29% vs. 0% at 10k steps); details in [notes/04-low-data.md](notes/04-low-data.md).
 
 ## Reproduce
 

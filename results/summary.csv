@@ -4,6 +4,10 @@ dp_subsetA_s1000_002000_n100,100,0.0,0.0,3.7,0.112,n/a (no language input)
 dp_subsetA_s1000_005000_n100,100,0.0,0.0,3.7,0.319,n/a (no language input)
 dp_subsetA_s1000_010000_n100,100,4.0,1.6,9.8,0.348,n/a (no language input)
 dp_subsetA_s1000_020000_n100,100,4.0,1.6,9.8,0.383,n/a (no language input)
+dp_subsetH_s1000_002000_n100,100,0.0,0.0,3.7,0.208,n/a (no language input)
+dp_subsetH_s1000_005000_n100,100,0.0,0.0,3.7,0.291,n/a (no language input)
+dp_subsetH_s1000_010000_n100,100,0.0,0.0,3.7,0.517,n/a (no language input)
+dp_subsetH_s1000_020000_n100,100,14.0,8.5,22.1,0.746,n/a (no language input)
 smolvla_full_s1000_005000_a8_n100,100,5.0,2.2,11.2,0.594,Push the T-shaped block onto the T-shaped target.
 smolvla_full_s1000_010000_a8_n100,100,29.0,21.0,38.5,0.752,Push the T-shaped block onto the T-shaped target.
 smolvla_full_s1000_015000_a8_n100,100,47.0,37.5,56.7,0.884,Push the T-shaped block onto the T-shaped target.
@@ -11,8 +15,15 @@ smolvla_full_s1000_020000_a50_n100,100,10.0,5.5,17.4,0.626,Push the T-shaped blo
 smolvla_full_s1000_020000_a8_n100,100,43.0,33.7,52.8,0.901,Push the T-shaped block onto the T-shaped target.
 smolvla_full_s1000_020000_a8_task-empty_n100,100,0.0,0.0,3.7,0.437,
 smolvla_full_s1000_020000_a8_task-envid_n100,100,1.0,0.2,5.4,0.404,PushT-v0
+smolvla_full_s1000_020000_a8_task-heldout2_n100,100,24.0,16.7,33.2,0.735,Position the T-shaped block over the goal.
+smolvla_full_s1000_020000_a8_task-heldout3_n100,100,31.0,22.8,40.6,0.67,Drive the T into the outlined target region.
+smolvla_full_s1000_020000_a8_task-heldout4_n100,100,40.0,30.9,49.8,0.774,Bring the block onto the T-shaped mark.
 smolvla_full_s1000_020000_a8_task-paraphrase_n100,100,36.0,27.3,45.8,0.806,Move the T block so that it covers the green T.
 smolvla_subsetA_s1000_002000_a8_n100,100,0.0,0.0,3.7,0.188,Push the T-shaped block onto the T-shaped target.
 smolvla_subsetA_s1000_005000_a8_n100,100,0.0,0.0,3.7,0.223,Push the T-shaped block onto the T-shaped target.
 smolvla_subsetA_s1000_010000_a8_n100,100,0.0,0.0,3.7,0.229,Push the T-shaped block onto the T-shaped target.
 smolvla_subsetA_s1000_020000_a8_n100,100,2.0,0.6,7.0,0.261,Push the T-shaped block onto the T-shaped target.
+smolvla_subsetH_s1000_002000_a8_n100,100,0.0,0.0,3.7,0.246,Push the T-shaped block onto the T-shaped target.
+smolvla_subsetH_s1000_005000_a8_n100,100,10.0,5.5,17.4,0.54,Push the T-shaped block onto the T-shaped target.
+smolvla_subsetH_s1000_010000_a8_n100,100,29.0,21.0,38.5,0.669,Push the T-shaped block onto the T-shaped target.
+smolvla_subsetH_s1000_020000_a8_n100,100,22.0,15.0,31.1,0.691,Push the T-shaped block onto the T-shaped target.
