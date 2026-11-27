@@ -1,6 +1,6 @@
 # Step 3: fine-tune SmolVLA on PushT
 
-Scripts: `train_smolvla.sh` (training), `eval_smolvla.py` (evaluation with the right instruction).
+Scripts: `scripts/train_smolvla.sh` (training), `scripts/eval_smolvla.py` (evaluation with the right instruction).
 
 ## Training run `smolvla_full_s1000`
 
@@ -20,7 +20,7 @@ Scripts: `train_smolvla.sh` (training), `eval_smolvla.py` (evaluation with the r
    returned by `gym.make`; Gymnasium 1.x wrappers don't forward attributes, so the policy gets the env id
    **"PushT-v0"** instead of the training instruction "Push the T-shaped block onto the T-shaped target."
    Result: ~0% success, average max coverage 0.008; the agent pushes the T away from the target.
-   Diffusion Policy ignores language and is unaffected. Fix: `eval_smolvla.py` sets the attribute on
+   Diffusion Policy ignores language and is unaffected. Fix: `scripts/eval_smolvla.py` sets the attribute on
    `gym.Wrapper`. Check `task_descriptions.json` in every eval output folder.
 
 ## How the bug was isolated (debugging recipe for a policy that fails in closed loop)
@@ -34,11 +34,11 @@ Scripts: `train_smolvla.sh` (training), `eval_smolvla.py` (evaluation with the r
 | Own closed-loop rollout, seeds 0–2 | 3/3 success with the instruction; with an empty one: 0.97, **0.00**, 0.96 | it's the language input |
 
 A second eval bug (2026-11-26): the `--task` override first reached only the main process. The simulator
-workers re-import `eval_smolvla.py` without the command-line arguments and fell back to the default
+workers re-import `scripts/eval_smolvla.py` without the command-line arguments and fell back to the default
 instruction; now it is passed through the environment variable `PUSHT_EVAL_TASK`. Again visible in
 `task_descriptions.json`.
 
-## Results: 100 episodes, environment seeds 1000–1099, the same for every policy (`run_evals.sh`)
+## Results: 100 episodes, environment seeds 1000–1099, the same for every policy (`scripts/run_evals.sh`)
 
 All demos (206). SmolVLA executes 8 actions per predicted chunk unless stated otherwise.
 

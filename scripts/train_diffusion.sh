@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Train Diffusion Policy from scratch on PushT (used for the low-data runs).
 #
-# Usage:  bash train_diffusion.sh <run_name> [extra lerobot-train args...]
-# Example: bash train_diffusion.sh dp_subsetA_s1000 --seed=1000 --dataset.episodes="$(python -c 'import json;print(json.load(open("subsets.json"))["A"])')"
+# Usage:  bash scripts/train_diffusion.sh <run_name> [extra lerobot-train args...]
+# Example: bash scripts/train_diffusion.sh dp_subsetA_s1000 --seed=1000 --dataset.episodes="$(python -c 'import json;print(json.load(open("configs/subsets.json"))["A"])')"
 #
 # Architecture = the pretrained reference lerobot/diffusion_pusht (its config differs from LeRobot's
 # defaults): horizon 16, 8 executed actions, 84x84 crop, GroupNorm, ResNet-18 trained from scratch
@@ -11,7 +11,7 @@
 # (batch 32, 20k steps, checkpoint every 1k) so both policies get the same training budget in samples.
 set -euo pipefail
 
-RUN_NAME=${1:?usage: bash train_diffusion.sh <run_name> [extra args]}
+RUN_NAME=${1:?usage: bash scripts/train_diffusion.sh <run_name> [extra args]}
 shift
 
 lerobot-train \

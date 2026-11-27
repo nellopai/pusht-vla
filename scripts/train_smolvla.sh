@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Fine-tune SmolVLA (lerobot/smolvla_base) on PushT.
 #
-# Usage:  bash train_smolvla.sh <run_name> [extra lerobot-train args...]
-# Example: bash train_smolvla.sh smolvla_full_s1000 --seed=1000
+# Usage:  bash scripts/train_smolvla.sh <run_name> [extra lerobot-train args...]
+# Example: bash scripts/train_smolvla.sh smolvla_full_s1000 --seed=1000
 #
 # Choices (measured on an RTX 4060 Laptop, 8 GB):
 #   - batch size 32: 5.4 GB, ~31 samples/s. Batch 64 needs 9.4 GB and spills into system memory (~15x slower).
@@ -13,11 +13,12 @@
 #     and 6D state/action, so the image key is renamed and the feature shapes are set explicitly
 #     (otherwise the loss and the output use 6 action dimensions, 4 of them padding).
 set -euo pipefail
+# LEROBOT_TRAIN overrides the training command (run_prompts.sh uses scripts/train_smolvla_prompts.py).
 
-RUN_NAME=${1:?usage: bash train_smolvla.sh <run_name> [extra args]}
+RUN_NAME=${1:?usage: bash scripts/train_smolvla.sh <run_name> [extra args]}
 shift
 
-lerobot-train \
+${LEROBOT_TRAIN:-lerobot-train} \
   --policy.path=lerobot/smolvla_base \
   --dataset.repo_id=lerobot/pusht \
   --rename_map='{"observation.image": "observation.images.camera1"}' \

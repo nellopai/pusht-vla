@@ -1,5 +1,9 @@
 run,n_episodes,success_pct,ci95_low,ci95_high,avg_max_coverage,instruction
 dp_pretrained_n100,100,63.0,53.2,71.8,0.931,n/a (no language input)
+dp_subsetA_s1000_002000_n100,100,0.0,0.0,3.7,0.112,n/a (no language input)
+dp_subsetA_s1000_005000_n100,100,0.0,0.0,3.7,0.319,n/a (no language input)
+dp_subsetA_s1000_010000_n100,100,4.0,1.6,9.8,0.348,n/a (no language input)
+dp_subsetA_s1000_020000_n100,100,4.0,1.6,9.8,0.383,n/a (no language input)
 smolvla_full_s1000_005000_a8_n100,100,5.0,2.2,11.2,0.594,Push the T-shaped block onto the T-shaped target.
 smolvla_full_s1000_010000_a8_n100,100,29.0,21.0,38.5,0.752,Push the T-shaped block onto the T-shaped target.
 smolvla_full_s1000_015000_a8_n100,100,47.0,37.5,56.7,0.884,Push the T-shaped block onto the T-shaped target.
@@ -8,3 +12,7 @@ smolvla_full_s1000_020000_a8_n100,100,43.0,33.7,52.8,0.901,Push the T-shaped blo
 smolvla_full_s1000_020000_a8_task-empty_n100,100,0.0,0.0,3.7,0.437,
 smolvla_full_s1000_020000_a8_task-envid_n100,100,1.0,0.2,5.4,0.404,PushT-v0
 smolvla_full_s1000_020000_a8_task-paraphrase_n100,100,36.0,27.3,45.8,0.806,Move the T block so that it covers the green T.
+smolvla_subsetA_s1000_002000_a8_n100,100,0.0,0.0,3.7,0.188,Push the T-shaped block onto the T-shaped target.
+smolvla_subsetA_s1000_005000_a8_n100,100,0.0,0.0,3.7,0.223,Push the T-shaped block onto the T-shaped target.
+smolvla_subsetA_s1000_010000_a8_n100,100,0.0,0.0,3.7,0.229,Push the T-shaped block onto the T-shaped target.
+smolvla_subsetA_s1000_020000_a8_n100,100,2.0,0.6,7.0,0.261,Push the T-shaped block onto the T-shaped target.

@@ -1,6 +1,6 @@
 """Collect all finished evaluations into results/ (committed, so every number in the README is traceable).
 
-Usage: python collect_results.py
+Usage: python scripts/collect_results.py
 Reads outputs/eval/*_n100/ and writes:
   results/summary.csv            one row per evaluation run
   results/runs/<name>.json       overall metrics, per-episode max coverage and success, instruction used

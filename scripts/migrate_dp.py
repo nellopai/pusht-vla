@@ -1,6 +1,6 @@
 """Convert the pretrained lerobot/diffusion_pusht to the processor format that LeRobot 0.7 needs.
 
-Usage: python migrate_dp.py --pretrained-path lerobot/diffusion_pusht --output-dir outputs/models/diffusion_pusht_migrated
+Usage: python scripts/migrate_dp.py --pretrained-path lerobot/diffusion_pusht --output-dir outputs/models/diffusion_pusht_migrated
 
 The hub model predates LeRobot's processor pipelines; lerobot-eval refuses it with "requires migration
 to processor format". LeRobot ships a migration script, but in 0.7 it fails silently on save because

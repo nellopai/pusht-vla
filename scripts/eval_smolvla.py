@@ -1,6 +1,6 @@
 """Run lerobot-eval for a SmolVLA checkpoint on PushT, with the language instruction set.
 
-Usage: python eval_smolvla.py [--task "..."] [lerobot-eval args...]
+Usage: python scripts/eval_smolvla.py [--task "..."] [lerobot-eval args...]
 
 Why this wrapper: the PushT simulator has no `task_description`, so LeRobot 0.7's vector env falls
 back to the env id and SmolVLA receives the instruction "PushT-v0". SmolVLA was trained with the

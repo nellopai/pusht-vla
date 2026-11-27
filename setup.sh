@@ -28,4 +28,4 @@ pip install 'lerobot[training,pusht,diffusion,smolvla]'
 pip install matplotlib   # plots in explore_data.py
 
 # 4. Check that everything works.
-python check_env.py
+python scripts/check_env.py

@@ -1,6 +1,6 @@
 """Sanity check for the pusht-vla environment.
 
-Run inside the conda env:  python check_env.py
+Run inside the conda env:  python scripts/check_env.py
 Checks: PyTorch sees the GPU, LeRobot imports, and the PushT simulation runs one episode step.
 """
 

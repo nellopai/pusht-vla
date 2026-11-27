@@ -3,7 +3,7 @@
 Plots the agent's positions (observation.state) and the commanded actions for one
 episode, and checks how action[t] relates to state[t] and state[t+1].
 
-Run:  conda activate lerobot && python explore_data.py
+Run:  conda activate lerobot && python scripts/explore_data.py
 """
 
 from pathlib import Path

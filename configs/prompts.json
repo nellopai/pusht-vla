@@ -1,0 +1,22 @@
+{
+  "_comment": "Instruction variants for SmolVLA prompt augmentation. 'train' is sampled per training sample; 'test' is held out (never seen in training) and used only for evaluation. p_empty: fraction of training samples that get an empty instruction.",
+  "p_empty": 0.1,
+  "train": [
+    "Push the T-shaped block onto the T-shaped target.",
+    "Push the T block onto the target.",
+    "Move the T-shaped piece so it lines up with the target outline.",
+    "Slide the T onto the T-shaped goal area.",
+    "Align the T-shaped block with the target shape.",
+    "Get the T block to cover the target T.",
+    "Use the agent to push the T into its target pose.",
+    "Place the T-shaped object exactly on the marked T.",
+    "Nudge the block until it matches the T-shaped target.",
+    "Push the block so that it sits on top of the target."
+  ],
+  "test": [
+    "Move the T block so that it covers the green T.",
+    "Position the T-shaped block over the goal.",
+    "Drive the T into the outlined target region.",
+    "Bring the block onto the T-shaped mark."
+  ]
+}

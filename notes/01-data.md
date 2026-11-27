@@ -1,6 +1,6 @@
 # Step 1: look at the data
 
-Script: `explore_data.py` (episode 0 of `lerobot/pusht`; plots and images go to `outputs/`).
+Script: `scripts/explore_data.py` (episode 0 of `lerobot/pusht`; plots and images go to `outputs/`).
 
 ## The task
 

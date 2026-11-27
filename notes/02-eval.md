@@ -18,7 +18,7 @@ broken pipeline. Checked with the pretrained Diffusion Policy `lerobot/diffusion
 
 - The hub model predates LeRobot's processor format: `lerobot-eval` refuses it ("requires migration to
   processor format"). LeRobot's migration script fails silently on save in 0.7 (list-valued `crop_shape`).
-  Fix: `migrate_dp.py` (converts those fields to tuples; weights and settings unchanged, nothing uploaded).
+  Fix: `scripts/migrate_dp.py` (converts those fields to tuples; weights and settings unchanged, nothing uploaded).
   The migrated model lives in `outputs/models/diffusion_pusht_migrated`.
 
 ## Results
